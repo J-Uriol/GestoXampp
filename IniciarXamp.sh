@@ -17,7 +17,6 @@ verificar_xampp_instalado() {
         echo "❌ XAMPP no está instalado."
         return 1
     fi
-  
 }
 
 # Función para verificar si MySQL está en ejecución
@@ -100,6 +99,29 @@ iniciar_xampp_grafico() {
     echo "✅ XAMPP en modo gráfico iniciado."
 }
 
+# Función para reinstalar XAMPP de manera limpia
+reinstalar_xampp() {
+    echo "ADVERTENCIA: Esta operación eliminará todos los archivos de configuración y bases de datos de XAMPP, incluidos los datos de MySQL y otros servicios que hayas configurado."
+    echo "Si deseas continuar con la reinstalación limpia, presiona 1. Si deseas cancelar, presiona cualquier otra tecla."
+    read -r confirmacion
+    if [ "$confirmacion" == "1" ]; then
+        echo "Reinstalando XAMPP..."
+
+        # Detener XAMPP si está en ejecución
+        echo "$SUDO_PASSWORD" | sudo -S /opt/lampp/lampp stop
+        sleep 2
+
+        # Eliminar XAMPP
+        echo "$SUDO_PASSWORD" | sudo -S rm -rf /opt/lampp
+        echo "$(date): XAMPP desinstalado" >> "$LOG_FILE"
+
+        # Instalar XAMPP nuevamente
+        instalar_xampp
+    else
+        echo "Reinstalación cancelada. El proceso se ha detenido."
+    fi
+}
+
 # Menú principal
 if ! verificar_xampp_instalado; then
     echo "¿Deseas instalar XAMPP? | 1.- Sí | 2.- No"
@@ -126,8 +148,11 @@ while true; do
     echo "1.- Iniciar XAMPP"
     echo "2.- Parar XAMPP"
     echo "3.- Iniciar XAMPP en modo gráfico"
-    echo "4.- Reiniciar XAMPP"
-    echo "5.- Salir"
+    if verificar_xampp_instalado; then
+        echo "4.- Reinstalar XAMPP (eliminará todos los datos)"
+    fi
+    echo "5.- Reiniciar XAMPP"
+    echo "6.- Salir"
     echo "================================="
     read -r opcion
 
@@ -143,9 +168,12 @@ while true; do
             iniciar_xampp_grafico
             ;;
         4)
-            reiniciar_xampp
+            reinstalar_xampp
             ;;
         5)
+            reiniciar_xampp
+            ;;
+        6)
             echo "👋 Saliendo del script. ¡Adiós!"
             exit 0
             ;;
