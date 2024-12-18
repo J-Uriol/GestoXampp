@@ -3,6 +3,7 @@
 # Script para gestionar XAMPP
 XAMPP_DIR="/opt/lampp"
 XAMPP_INSTALLER="xampp-linux-x64-8.2.4-0-installer.run"
+XAMPP_VERSION="8.2.4"
 
 # Colores para el menú
 CYAN='\033[0;36m'
@@ -26,7 +27,7 @@ verificar_xampp_instalado() {
 instalar_xampp() {
     echo -e "${CYAN}Iniciando la instalación de XAMPP...${NC}"
     if [ ! -f "$XAMPP_INSTALLER" ]; then
-        wget "https://sourceforge.net/projects/xampp/files/XAMPP%20Linux/8.2.4/$XAMPP_INSTALLER"
+        wget "https://sourceforge.net/projects/xampp/files/XAMPP%20Linux/$XAMPP_VERSION/$XAMPP_INSTALLER"
     fi
     chmod +x "$XAMPP_INSTALLER"
     sudo ./"$XAMPP_INSTALLER"
@@ -80,6 +81,47 @@ iniciar_mysql() {
     clear
 }
 
+# Función para mostrar logs
+mostrar_logs() {
+    echo -e "${CYAN}Seleccione el log que desea ver:${NC}"
+    echo "1. Apache error log"
+    echo "2. MySQL error log"
+    echo "3. PHP error log"
+    read -r opcion_log
+
+    case $opcion_log in
+        1) sudo tail -n 50 "$XAMPP_DIR/logs/error_log" ;;
+        2) sudo tail -n 50 "$XAMPP_DIR/var/mysql/$(hostname).err" ;;
+        3) sudo tail -n 50 "$XAMPP_DIR/logs/php_error_log" ;;
+        *) echo -e "${YELLOW}Opción no válida.${NC}" ;;
+    esac
+}
+
+# Función para verificar el estado de los servicios
+verificar_estado_servicios() {
+    echo -e "${CYAN}Estado de los servicios:${NC}"
+    sudo "$XAMPP_DIR/xampp" status
+}
+
+# Función para abrir phpMyAdmin en el navegador
+abrir_phpmyadmin() {
+    echo -e "${CYAN}Abriendo phpMyAdmin en el navegador...${NC}"
+    xdg-open "http://localhost/phpmyadmin/" &>/dev/null
+}
+
+# Función para verificar actualizaciones
+verificar_actualizaciones() {
+    echo -e "${CYAN}Verificando actualizaciones de XAMPP...${NC}"
+    latest_version=$(curl -s https://www.apachefriends.org/download.html | grep -oP 'XAMPP for Linux \K[0-9.]+' | head -n 1)
+    if [ "$latest_version" != "$XAMPP_VERSION" ]; then
+        echo -e "${YELLOW}Hay una nueva versión disponible: $latest_version${NC}"
+        echo -e "${YELLOW}Tu versión actual es: $XAMPP_VERSION${NC}"
+        echo -e "${YELLOW}Visita https://www.apachefriends.org/download.html para descargar la última versión.${NC}"
+    else
+        echo -e "${GREEN}XAMPP está actualizado a la última versión.${NC}"
+    fi
+}
+
 # Función para mostrar el menú principal
 mostrar_menu() {
     clear
@@ -94,11 +136,19 @@ mostrar_menu() {
     echo -e "${CYAN}║ ${YELLOW}MySQL${CYAN}                              ║${NC}"
     echo -e "${CYAN}║   4. Iniciar MySQL                 ║${NC}"
     echo -e "${CYAN}╠════════════════════════════════════╣${NC}"
+    echo -e "${CYAN}║ ${YELLOW}Monitoreo${CYAN}                          ║${NC}"
+    echo -e "${CYAN}║   5. Ver logs                      ║${NC}"
+    echo -e "${CYAN}║   6. Estado de servicios           ║${NC}"
+    echo -e "${CYAN}╠════════════════════════════════════╣${NC}"
+    echo -e "${CYAN}║ ${YELLOW}Herramientas${CYAN}                       ║${NC}"
+    echo -e "${CYAN}║   7. Abrir phpMyAdmin              ║${NC}"
+    echo -e "${CYAN}║   8. Verificar actualizaciones     ║${NC}"
+    echo -e "${CYAN}╠════════════════════════════════════╣${NC}"
     echo -e "${CYAN}║ ${YELLOW}Administración${CYAN}                     ║${NC}"
-    echo -e "${CYAN}║   5. Instalar/Desinstalar XAMPP    ║${NC}"
+    echo -e "${CYAN}║   9. Instalar/Desinstalar XAMPP    ║${NC}"
     echo -e "${CYAN}╠════════════════════════════════════╣${NC}"
     echo -e "${CYAN}║ ${YELLOW}Otros${CYAN}                              ║${NC}"
-    echo -e "${CYAN}║   6. Salir                         ║${NC}"
+    echo -e "${CYAN}║   0. Salir                         ║${NC}"
     echo -e "${CYAN}╚════════════════════════════════════╝${NC}"
     echo -e "${YELLOW}Selecciona una opción:${NC} "
 }
@@ -107,7 +157,7 @@ mostrar_menu() {
 mostrar_submenu_admin() {
     clear
     echo -e "${CYAN}╔════════════════════════════════════╗${NC}"
-    echo -e "${CYAN}║    ${YELLOW}ADMINISTRACIÓN DE XAMPP${CYAN}        ║${NC}"
+    echo -e "${CYAN}║    ${YELLOW}ADMINISTRACIÓN DE XAMPP${CYAN}         ║${NC}"
     echo -e "${CYAN}╠════════════════════════════════════╣${NC}"
     echo -e "${CYAN}║   1. Instalar XAMPP                ║${NC}"
     echo -e "${CYAN}║   2. Desinstalar XAMPP             ║${NC}"
@@ -151,6 +201,34 @@ while true; do
             fi
             ;;
         5)
+            if verificar_xampp_instalado; then
+                mostrar_logs
+            else
+                echo -e "${YELLOW}XAMPP no está instalado. Instálalo primero.${NC}"
+            fi
+            ;;
+        6)
+            if verificar_xampp_instalado; then
+                verificar_estado_servicios
+            else
+                echo -e "${YELLOW}XAMPP no está instalado. Instálalo primero.${NC}"
+            fi
+            ;;
+        7)
+            if verificar_xampp_instalado; then
+                abrir_phpmyadmin
+            else
+                echo -e "${YELLOW}XAMPP no está instalado. Instálalo primero.${NC}"
+            fi
+            ;;
+        8)
+            if verificar_xampp_instalado; then
+                verificar_actualizaciones
+            else
+                echo -e "${YELLOW}XAMPP no está instalado. Instálalo primero.${NC}"
+            fi
+            ;;
+        9)
             while true; do
                 mostrar_submenu_admin
                 read -r opcion_admin
@@ -179,7 +257,7 @@ while true; do
                 read -p "Presiona Enter para continuar..."
             done
             ;;
-        6)
+        0)
             echo -e "${GREEN}Saliendo del script. ¡Hasta luego!${NC}"
             exit 0
             ;;
