@@ -62,14 +62,23 @@ detener_xampp() {
     sudo "$XAMPP_DIR/xampp" stop
 }
 
+# Función para reiniciar XAMPP
+reiniciar_xampp() {
+    echo -e "${CYAN}Reiniciando XAMPP...${NC}"
+    sudo "$XAMPP_DIR/xampp" restart
+}
+
 # Función para iniciar MySQL
 iniciar_mysql() {
     echo -e "${CYAN}Iniciando MySQL...${NC}"
-    sudo /opt/lampp/bin/mysql 
+    echo -e "${YELLOW}Ingrese el nombre de usuario de MySQL (deje en blanco para usar root):${NC}"
+    read -r mysql_user
+    if [ -z "$mysql_user" ]; then
+        mysql_user="root"
+    fi
+    sudo /opt/lampp/bin/mysql -u "$mysql_user" -p
     clear
 }
-
-
 
 # Función para mostrar el menú principal
 mostrar_menu() {
@@ -77,18 +86,19 @@ mostrar_menu() {
     echo -e "${CYAN}╔════════════════════════════════════╗${NC}"
     echo -e "${CYAN}║        ${YELLOW}GESTOR DE XAMPP${CYAN}             ║${NC}"
     echo -e "${CYAN}╠════════════════════════════════════╣${NC}"
-    echo -e "${CYAN}║ ${YELLOW}XAMPP${CYAN}                               ║${NC}"
+    echo -e "${CYAN}║ ${YELLOW}XAMPP${CYAN}                              ║${NC}"
     echo -e "${CYAN}║   1. Iniciar XAMPP                 ║${NC}"
     echo -e "${CYAN}║   2. Detener XAMPP                 ║${NC}"
+    echo -e "${CYAN}║   3. Reiniciar XAMPP               ║${NC}"
     echo -e "${CYAN}╠════════════════════════════════════╣${NC}"
-    echo -e "${CYAN}║ ${YELLOW}MySQL${CYAN}                               ║${NC}"
-    echo -e "${CYAN}║   3. Iniciar MySQL                 ║${NC}"
+    echo -e "${CYAN}║ ${YELLOW}MySQL${CYAN}                              ║${NC}"
+    echo -e "${CYAN}║   4. Iniciar MySQL                 ║${NC}"
     echo -e "${CYAN}╠════════════════════════════════════╣${NC}"
-    echo -e "${CYAN}║ ${YELLOW}Administración${CYAN}                      ║${NC}"
-    echo -e "${CYAN}║   4. Instalar/Desinstalar XAMPP    ║${NC}"
+    echo -e "${CYAN}║ ${YELLOW}Administración${CYAN}                     ║${NC}"
+    echo -e "${CYAN}║   5. Instalar/Desinstalar XAMPP    ║${NC}"
     echo -e "${CYAN}╠════════════════════════════════════╣${NC}"
-    echo -e "${CYAN}║ ${YELLOW}Otros${CYAN}                               ║${NC}"
-    echo -e "${CYAN}║   5. Salir                         ║${NC}"
+    echo -e "${CYAN}║ ${YELLOW}Otros${CYAN}                              ║${NC}"
+    echo -e "${CYAN}║   6. Salir                         ║${NC}"
     echo -e "${CYAN}╚════════════════════════════════════╝${NC}"
     echo -e "${YELLOW}Selecciona una opción:${NC} "
 }
@@ -97,7 +107,7 @@ mostrar_menu() {
 mostrar_submenu_admin() {
     clear
     echo -e "${CYAN}╔════════════════════════════════════╗${NC}"
-    echo -e "${CYAN}║    ${YELLOW}ADMINISTRACIÓN DE XAMPP${CYAN}         ║${NC}"
+    echo -e "${CYAN}║    ${YELLOW}ADMINISTRACIÓN DE XAMPP${CYAN}        ║${NC}"
     echo -e "${CYAN}╠════════════════════════════════════╣${NC}"
     echo -e "${CYAN}║   1. Instalar XAMPP                ║${NC}"
     echo -e "${CYAN}║   2. Desinstalar XAMPP             ║${NC}"
@@ -128,12 +138,19 @@ while true; do
             ;;
         3)
             if verificar_xampp_instalado; then
-                iniciar_mysql
+                reiniciar_xampp
             else
                 echo -e "${YELLOW}XAMPP no está instalado. Instálalo primero.${NC}"
             fi
             ;;
         4)
+            if verificar_xampp_instalado; then
+                iniciar_mysql
+            else
+                echo -e "${YELLOW}XAMPP no está instalado. Instálalo primero.${NC}"
+            fi
+            ;;
+        5)
             while true; do
                 mostrar_submenu_admin
                 read -r opcion_admin
@@ -162,7 +179,7 @@ while true; do
                 read -p "Presiona Enter para continuar..."
             done
             ;;
-        5)
+        6)
             echo -e "${GREEN}Saliendo del script. ¡Hasta luego!${NC}"
             exit 0
             ;;
