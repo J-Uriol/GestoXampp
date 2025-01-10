@@ -87,12 +87,17 @@ mostrar_logs() {
     echo "1. Apache error log"
     echo "2. MySQL error log"
     echo "3. PHP error log"
+    echo "4. Salir"
+    echo "Selecione una opcion: "
+
     read -r opcion_log
+
 
     case $opcion_log in
         1) sudo tail -n 50 "$XAMPP_DIR/logs/error_log" ;;
         2) sudo tail -n 50 "$XAMPP_DIR/var/mysql/$(hostname).err" ;;
         3) sudo tail -n 50 "$XAMPP_DIR/logs/php_error_log" ;;
+        4) echo "Saliendo...";;
         *) echo -e "${YELLOW}Opción no válida.${NC}" ;;
     esac
 }
