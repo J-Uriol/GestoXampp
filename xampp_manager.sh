@@ -1,16 +1,19 @@
 #!/bin/bash
-
+#Creado por y para la gente
 # Script para gestionar XAMPP
+
 XAMPP_DIR="/opt/lampp"
 XAMPP_INSTALLER="xampp-linux-x64-8.2.4-0-installer.run"
 XAMPP_VERSION="8.2.4"
 
-# Colores para el menú
+
 CYAN='\033[0;36m'
 GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
+YELLOW='\033[0;33m'
 RED='\033[0;31m'
-NC='\033[0m' # No Color
+BLUE='\033[0;34m'
+MAGENTA='\033[0;35m'
+NC='\033[0m'
 
 # Función para verificar si XAMPP está instalado
 verificar_xampp_instalado() {
