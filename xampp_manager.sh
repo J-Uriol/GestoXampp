@@ -6,7 +6,7 @@ XAMPP_DIR="/opt/lampp"
 XAMPP_INSTALLER="xampp-linux-x64-8.2.4-0-installer.run"
 XAMPP_VERSION="8.2.4"
 
-
+LIME='\033[1;32m'
 CYAN='\033[0;36m'
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
@@ -134,44 +134,44 @@ verificar_actualizaciones() {
 mostrar_menu() {
     clear
     echo -e "${CYAN}╔════════════════════════════════════╗${NC}"
-    echo -e "${CYAN}║        ${YELLOW}GESTOR DE XAMPP${CYAN}             ║${NC}"
+    echo -e "${CYAN}║        ${LIME}GESTOR DE XAMPP${CYAN}             ║${NC}"
     echo -e "${CYAN}╠════════════════════════════════════╣${NC}"
-    echo -e "${CYAN}║ ${YELLOW}XAMPP${CYAN}                              ║${NC}"
+    echo -e "${CYAN}║ ${LIME}XAMPP${CYAN}                              ║${NC}"
     echo -e "${CYAN}║   1. Iniciar XAMPP                 ║${NC}"
     echo -e "${CYAN}║   2. Detener XAMPP                 ║${NC}"
     echo -e "${CYAN}║   3. Reiniciar XAMPP               ║${NC}"
     echo -e "${CYAN}╠════════════════════════════════════╣${NC}"
-    echo -e "${CYAN}║ ${YELLOW}MySQL${CYAN}                              ║${NC}"
+    echo -e "${CYAN}║ ${LIME}MySQL${CYAN}                              ║${NC}"
     echo -e "${CYAN}║   4. Iniciar MySQL                 ║${NC}"
     echo -e "${CYAN}╠════════════════════════════════════╣${NC}"
-    echo -e "${CYAN}║ ${YELLOW}Monitoreo${CYAN}                          ║${NC}"
+    echo -e "${CYAN}║ ${LIME}Monitoreo${CYAN}                          ║${NC}"
     echo -e "${CYAN}║   5. Ver logs                      ║${NC}"
     echo -e "${CYAN}║   6. Estado de servicios           ║${NC}"
     echo -e "${CYAN}╠════════════════════════════════════╣${NC}"
-    echo -e "${CYAN}║ ${YELLOW}Herramientas${CYAN}                       ║${NC}"
+    echo -e "${CYAN}║ ${LIME}Herramientas${CYAN}                       ║${NC}"
     echo -e "${CYAN}║   7. Abrir phpMyAdmin              ║${NC}"
     echo -e "${CYAN}║   8. Verificar actualizaciones     ║${NC}"
     echo -e "${CYAN}╠════════════════════════════════════╣${NC}"
-    echo -e "${CYAN}║ ${YELLOW}Administración${CYAN}                     ║${NC}"
+    echo -e "${CYAN}║ ${LIME}Administración${CYAN}                     ║${NC}"
     echo -e "${CYAN}║   9. Instalar/Desinstalar XAMPP    ║${NC}"
     echo -e "${CYAN}╠════════════════════════════════════╣${NC}"
-    echo -e "${CYAN}║ ${YELLOW}Otros${CYAN}                              ║${NC}"
+    echo -e "${CYAN}║ ${LIME}Otros${CYAN}                              ║${NC}"
     echo -e "${CYAN}║   0. Salir                         ║${NC}"
     echo -e "${CYAN}╚════════════════════════════════════╝${NC}"
-    echo -e "${YELLOW}Selecciona una opción:${NC} "
+    echo -e "${LIME}Selecciona una opción:${NC} "
 }
 
 # Función para mostrar el submenú de administración
 mostrar_submenu_admin() {
     clear
     echo -e "${CYAN}╔════════════════════════════════════╗${NC}"
-    echo -e "${CYAN}║    ${YELLOW}ADMINISTRACIÓN DE XAMPP${CYAN}         ║${NC}"
+    echo -e "${CYAN}║    ${LIME}ADMINISTRACIÓN DE XAMPP${CYAN}         ║${NC}"
     echo -e "${CYAN}╠════════════════════════════════════╣${NC}"
     echo -e "${CYAN}║   1. Instalar XAMPP                ║${NC}"
     echo -e "${CYAN}║   2. Desinstalar XAMPP             ║${NC}"
     echo -e "${CYAN}║   3. Volver al menú principal      ║${NC}"
     echo -e "${CYAN}╚════════════════════════════════════╝${NC}"
-    echo -e "${YELLOW}Selecciona una opción:${NC} "
+    echo -e "${LIME}Selecciona una opción:${NC} "
 }
 
 # Menú principal
